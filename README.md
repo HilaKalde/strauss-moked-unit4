@@ -9,3 +9,5 @@
 - בכל מסך הערות הפקה (`data-note`) לקראת ההמרה ל-Storyline.
 
 לצפייה: פותחים את `index.html` בדפדפן.
+
+קישור לצפייה: https://strauss-moked-unit4.vercel.app
