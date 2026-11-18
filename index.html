@@ -91,7 +91,7 @@ button{font-family:inherit}
 .task li i{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--blue2);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;color:#fff;transition:background .3s}
 .task li.ok i{background:var(--green);border-color:var(--green)}.task li.ok i::before{content:"✓"}
 .simtools{flex:none;display:flex;gap:10px}
-.simtools button{flex:1;height:40px;border-radius:999px;border:2px solid var(--orange);background:#fff;color:var(--orange);font-size:var(--t);font-weight:700;cursor:pointer;transition:transform .15s}
+.simtools button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:40px;border-radius:999px;border:2px solid var(--orange);background:#fff;color:var(--orange);font-size:var(--t);font-weight:700;cursor:pointer;transition:transform .15s}
 .simtools button:hover{transform:translateY(-2px)}
 .simtools button:first-child,.simtools .snext{background:var(--orange);color:#fff}
 .simtools .snext,.sim.info .simtools button{display:none}.sim.info .simtools .snext{display:block}
@@ -235,6 +235,7 @@ h1 .hl{color:var(--blue2)}
 .fbox.seen::before{content:"✓";position:absolute;top:10px;left:10px;width:24px;height:24px;border-radius:50%;background:var(--green);color:#fff;font-size:15px;line-height:24px;text-align:center}
 .fdet{display:none;position:absolute;left:0;right:0;z-index:5;margin-top:14px;padding:14px 20px 14px 52px;border-radius:16px;background:#fff;border:2px solid var(--sky2);border-right:6px solid var(--orange);box-shadow:0 14px 34px rgba(19,35,91,.18);font-size:var(--t);line-height:1.45;color:var(--navy)}
 .fdet.on{display:block;animation:simpop .3s ease-out}
+.screen[data-name="flow"] .fdet.on{animation:none}
 .fdet .x{position:absolute;top:10px;left:12px;width:30px;height:30px;border-radius:50%;border:0;background:var(--sky);color:var(--deep);font-size:20px;line-height:30px;cursor:pointer}.fdet b{color:var(--deep)}
 .far{flex:none;width:30px;display:flex;align-items:center;justify-content:center;color:var(--blue2);font-size:28px}
 
@@ -597,7 +598,7 @@ function block(b,top){
  case 'rows':return '<div class="rows'+(b.cols?' c2':'')+A+'">'+b.items.map(function(i){return '<div class="row"><div class="b">'+ic(i.ic)+'</div><span>'+i.t+'</span></div>'}).join('')+'</div>';
  case 'flip':return '<div class="flips'+A+'">'+b.items.map(function(i){return '<div class="flip rv" role="button" tabindex="0"><div class="in"><div class="f"><div class="b">'+ic(i.ic)+'</div><div><h3>'+i.f+'</h3><small>לחצו לגילוי</small></div></div><div class="bk">'+i.b+'</div></div></div>'}).join('')+'</div>';
  case 'nav':return '<div class="navg'+A+'">'+b.items.map(function(i){return '<button class="navb" data-a="jump" data-t="'+i[2]+'"><span class="b">'+ic(i[0])+'</span><span>'+i[1]+'</span><small>למעבר ›</small></button>'}).join('')+'</div>';
- case 'flow':return '<div class="flow'+A+'">'+b.items.map(function(i){return '<button class="fbox rv" data-a="fdet" data-d="'+(i[3]||'').replace(/"/g,'&quot;')+'"><span class="b">'+ic(i[0])+'</span><span class="k">'+i[1]+'</span><span>'+i[2]+'</span></button>'}).join('<span class="far">‹</span>')+'</div><div class="fdet"></div>';
+ case 'flow':return '<div class="flow'+A+'">'+b.items.map(function(i){return '<button class="fbox rv" data-a="fdet" data-d="'+(i[3]||'').replace(/"/g,'&quot;')+'"><span class="b">'+ic(i[0])+'</span><span class="k">'+i[1]+'</span><span>'+i[2]+'</span></button>'}).join('<span class="far"><svg viewBox=\"0 0 24 24\" width=\"26\" height=\"26\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 5l-7 7 7 7\"/></svg></span>')+'</div><div class="fdet"></div>';
  case 'steps':return (b.title?'<div class="steps-t'+A+'">'+b.title+' <small>(לחצו על כל צעד)</small></div>':'')+'<div class="steps'+A+'">'+b.items.map(function(i,k){return '<button class="step rv"><span class="n">'+(k+1)+'</span><h4>'+i[0]+'</h4><div class="more">לחצו לפרטים</div><p>'+i[1]+'</p></button>'}).join('')+'</div>';
  case 'terms':return '<div class="terms tc'+(b.cols||2)+A+'">'+b.items.map(function(i){return '<button class="term"><b>'+i[0]+'</b><span>לחצו להגדרה ›</span><p>'+i[1]+'</p></button>'}).join('')+'</div>';
  case 'callout':return '<div class="callout'+(b.k?' '+b.k:'')+A+'">'+ic(b.ic||'info')+'<span>'+b.x+'</span></div>';
@@ -659,7 +660,7 @@ function simHTML(s){var c=simBuild(s),k0=c.steps[0].img;
   '<div class="win"><div class="card"><span class="badge">'+ic('check')+'</span><h3>'+c.win+'</h3>'+(c.path?'<div class="path">'+c.path+'</div>':'')+(c.sub2?'<p>'+c.sub2+'</p>':'')+'<button data-a="simreset">↻ לנסות שוב</button></div></div></div></div>'+
   '<div class="simside"><div class="chat"><div class="who"><span class="av">ד</span><b>דנה</b><small>ראש צוות · עכשיו</small></div><div class="msgs"><div class="msg">'+c.hello+'</div></div></div>'+
   '<div class="task"><div class="tt">המשימה שלכם</div><ol>'+c.steps.map(function(st){return '<li><i></i><span>'+st.x+'</span></li>'}).join('')+'</ol></div>'+
-  '<div class="simtools"><button data-a="simshow"><svg class="shw" viewBox="0 0 12 12" width="13" height="13"><path d="M10 1.5v9l-8-4.5z" fill="currentColor"/></svg>הראו לי</button><button class="snext" data-a="simnext">המשך ›</button></div></div></div>'}
+  '<div class="simtools"><button data-a="simshow">הראו לי<svg class="shw" viewBox="0 0 12 12" width="13" height="13"><path d="M10 1.5v9l-8-4.5z" fill="currentColor"/></svg></button><button class="snext" data-a="simnext">המשך ›</button></div></div></div>'}
 function simUrl(k){return /^sap_/.test(k)?'SAP':/^(nepitzot|kasha_form|kasha_table)/.test(k)?'Excel':k==='kasha_notepad'?'Notepad':/^portal/.test(k)?'פורטל מערכות שטראוס':/^(gx|genesys)/.test(k)?'strauss.lightning.force.com · Genesys':'strauss.lightning.force.com'}
 function simFit(sm,k){sm.querySelector('.simbar span').textContent=simUrl(k);var d=DIM[k],z=sm.querySelector('.simz'),f=Math.min(804/d[0],416/d[1]);z.style.width=d[0]*f+'px';z.style.height=d[1]*f+'px'}
 function simSay(sm,txt){var m=sm.querySelector('.msgs');m.innerHTML='<div class="typing"><i></i><i></i><i></i></div>';clearTimeout(sm._t);sm._t=setTimeout(function(){m.innerHTML='<div class="msg">'+txt+'</div>'},650)}
